@@ -129,3 +129,41 @@ LEFT JOIN books AS b
   on b.author_id = a.author_id
 WHERE a.author_id BETWEEN 1 AND 5
 ORDER BY a.author_id ASC;
+
+
+-- Ejercicios de COUNT(something) con GROUP BY
+-- Muestro cuanto books distintos tiene cada autor
+SELECT a.author_id, a.name, a.nationality, COUNT(b.book_id)
+FROM authors AS a
+LEFT JOIN books AS b
+  on b.author_id = a.author_id
+WHERE a.author_id BETWEEN 1 AND 5
+GROUP BY a.author_id                                                                                            -- GROUP BY hace 'aggregation', quiere decir que en vez de mostrar 3 veces los datos de un autor va a mostrar solo una vez al autor pero que tiene 3 libros escritos
+ORDER BY a.author_id;                                                                                           -- Siempre que se pueda es mejor agrupar u ordenar por un id que por un string
+
+
+-- Si en vez de usar un LEFT JOIN uso un INNER JOIN solo me traera los datos que tienen libros registrados, los NULL no los va a traer
+SELECT a.author_id, a.name, a.nationality, COUNT(b.book_id)
+FROM authors AS a
+INNER JOIN books AS b
+  on b.author_id = a.author_id
+WHERE a.author_id BETWEEN 1 AND 5
+GROUP BY a.author_id                          
+ORDER BY a.author_id;  
+
+
+-- Le colocamos un alias a la columna que cuenta los libros
+SELECT a.author_id, a.name, a.nationality, COUNT(b.book_id) AS published_books
+FROM authors AS a
+LEFT JOIN books AS b
+  on b.author_id = a.author_id
+WHERE a.author_id BETWEEN 1 AND 5
+GROUP BY a.author_id                          
+ORDER BY a.author_id;
+
+
+-- Puedo ORDER BY en orden random, nunca se desplegara de la misma manera las filas aunque ejecutemos el mismo comando (no muy recomendado programaticamento con un script)
+SELECT * 
+FROM authors
+ORDER BY RAND()
+LIMIT 10;
